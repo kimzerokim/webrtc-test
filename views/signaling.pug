@@ -1,0 +1,29 @@
+doctype html
+html
+    head
+        title Reatime communication with WebRTC
+        link(rel='stylesheet', href='/stylesheets/style.css')
+    body
+        h1 Reatime communication with WebRTC
+
+        #audio
+            div
+                .label Local audio:
+                audio#audio1(autoplay='', controls='', muted='')
+            div
+                .label Remote audio:
+                audio#audio2(autoplay='', controls='')
+
+        #buttons
+            select#codec
+                option(value='opus') Opus
+                option(value='ISAC') iSAC 16K
+                option(value='G722') G722
+                option(value='PCMU') PCMU
+            button#callButton Call
+            button#hangupButton Hang Up
+
+
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js')
+    script(src='https://webrtc.github.io/adapter/adapter-latest.js')
+    script(src='/javascripts/signaling.js')
