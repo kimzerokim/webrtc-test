@@ -51,6 +51,10 @@ socket.on('joined', room => {
   })
 })
 
+socket.on('full', room => {
+  console.log(`room ${room} is full`)
+})
+
 socket.on('ready', () => {
   if (isCaller) {
     createPeerConnetion()
@@ -104,7 +108,7 @@ function setLocalAndOffer(sessionDescription) {
   socket.emit('offer', {
       type: 'offer',
       sdp: sessionDescription,
-      room: roomNumber
+      room: roomId
   });
 }
 
@@ -113,7 +117,7 @@ function setLocalAndAnswer(sessionDescription) {
   socket.emit('answer', {
       type: 'answer',
       sdp: sessionDescription,
-      room: roomNumber
+      room: roomId
   });
 }
 
@@ -122,7 +126,7 @@ function addLocalStream(stream) {
   localAudio.srcObject = stream
 }
 
-function createPeerConnetion() {
+function createPeerConnection() {
   rtcPeerConnection = new RTCPeerConnection(iceServers)
   rtcPeerConnection.onicecatidate = onIceCandidate
   rtcPeerConnection.onaddstream = onAddStream
