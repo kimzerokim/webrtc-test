@@ -61,10 +61,6 @@ io.sockets.on('connection', function (socket) {
   socket.on('answer', function(event){
       socket.broadcast.to(event.room).emit('answer', event.sdp);
   });
-
-  socket.on('toggleAudio', function(event){
-      socket.broadcast.to(event.room).emit('toggleAudio', event.message);
-  });
 });
 
 /**

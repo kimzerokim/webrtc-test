@@ -55,6 +55,15 @@ socket.on('full', room => {
   console.log(`room ${room} is full`)
 })
 
+socket.on('candidate', event => {
+  console.log('candidate event')
+  const candidate = new RTCIceCandidate({
+      sdpMLineIndex: event.label,
+      candidate: event.candidate
+  })
+  rtcPeerConnection.addIceCandidate(candidate)
+})
+
 socket.on('ready', () => {
   if (isCaller) {
     createPeerConnection()
@@ -62,14 +71,6 @@ socket.on('ready', () => {
     .then(desc => setLocalAndOffer(desc))
     .catch(err => console.log(err))
   }
-})
-
-socket.on('candidate', event => {
-  const candidate = new RTCIceCandidate({
-      sdpMLineIndex: event.label,
-      candidate: event.candidate
-  })
-  rtcPeerConnection.addIceCandidate(candidate)
 })
 
 socket.on('offer', event => {
@@ -130,8 +131,8 @@ function addLocalStream(stream) {
 }
 
 function createPeerConnection() {
-  rtcPeerConnection = new RTCPeerConnection(iceServers)
-  rtcPeerConnection.onicecatidate = onIceCandidate
-  rtcPeerConnection.onaddstream = onAddStream
-  rtcPeerConnection.addStream(localStream)
+  rtcPeerConnection = new RTCPeerConnection(iceServers);
+  rtcPeerConnection.onicecandidate = onIceCandidate;
+  rtcPeerConnection.onaddstream = onAddStream;
+  rtcPeerConnection.addStream(localStream);
 }
