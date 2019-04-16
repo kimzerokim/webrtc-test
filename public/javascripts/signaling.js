@@ -57,11 +57,8 @@ socket.on('full', room => {
 
 socket.on('ready', () => {
   if (isCaller) {
-    createPeerConnetion()
-    let offerOptions = {
-      offerToReceiveAudio: true
-    }
-    rtcPeerConnection.createOffer(offerOptions)
+    createPeerConnection()
+    rtcPeerConnection.createOffer()
     .then(desc => setLocalAndOffer(desc))
     .catch(err => console.log(err))
   }
@@ -76,6 +73,7 @@ socket.on('candidate', event => {
 })
 
 socket.on('offer', event => {
+  console.log('offer is received')
   if (!isCaller) {
     createPeerConnection();
     rtcPeerConnection.setRemoteDescription(new RTCSessionDescription(event));
@@ -84,6 +82,11 @@ socket.on('offer', event => {
     .catch(e => console.log(e));
   }
 });
+
+socket.on('answer', function (event) {
+  console.log('answer is received')
+  rtcPeerConnection.setRemoteDescription(new RTCSessionDescription(event));
+})
 
 function onIceCandidate(event) {
   if (event.candidate) {
