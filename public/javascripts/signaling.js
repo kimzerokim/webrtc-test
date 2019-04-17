@@ -11,12 +11,13 @@ let rtcPeerConnection
 let isCaller
 
 const iceServers = {
-  'iceServers': [{
-          'url': 'stun:stun.services.mozilla.com'
-      },
-      {
-          'url': 'stun:stun.l.google.com:19302'
-      }
+  'iceServers': [
+  {url:'stun:stun.l.google.com:19302'},
+  {
+    url:'turn:13.124.253.27:3478',
+    credential: 'root',
+    username: 'user'
+  }
   ]
 }
 const streamConstraints = {
@@ -43,6 +44,7 @@ socket.on('created', room => {
 })
 
 socket.on('joined', room => {
+  console.log('joined')
   navigator.mediaDevices.getUserMedia(streamConstraints).then(stream => {
     addLocalStream(stream)
     socket.emit('ready', roomId)
@@ -92,6 +94,7 @@ socket.on('answer', function (event) {
 function onIceCandidate(event) {
   if (event.candidate) {
       console.log('sending ice candidate');
+      console.log(event)
       socket.emit('candidate', {
           type: 'candidate',
           label: event.candidate.sdpMLineIndex,
@@ -103,6 +106,7 @@ function onIceCandidate(event) {
 }
 
 function onAddStream(event) {
+  console.log('remote stream added')
   remoteAudio.srcObject = event.stream;
   remoteStream = event.stream;
 }
